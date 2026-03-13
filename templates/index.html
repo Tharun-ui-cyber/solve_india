@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Child Education Dropout Prediction</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4F46E5;
+            --primary-hover: #4338CA;
+            --bg-color: #0f172a;
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --risk-bg: rgba(239, 68, 68, 0.1);
+            --risk-border: #ef4444;
+            --risk-text: #ef4444;
+            --safe-bg: rgba(34, 197, 94, 0.1);
+            --safe-border: #22c55e;
+            --safe-text: #22c55e;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            color: var(--text-main);
+        }
+
+        .container {
+            background: var(--card-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            width: 100%;
+            max-width: 400px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h2 {
+            text-align: center;
+            margin-top: 0;
+            margin-bottom: 30px;
+            font-size: 26px;
+            font-weight: 700;
+            background: linear-gradient(to right, #818cf8, #c084fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-weight: 500;
+            margin-bottom: 8px;
+            display: block;
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 14px 16px;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            box-sizing: border-box;
+            font-size: 16px;
+            color: white;
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+        }
+
+        input[type="number"]:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+        }
+
+        input[type="number"]::placeholder {
+            color: rgba(148, 163, 184, 0.5);
+        }
+
+        input[type="submit"] {
+            background: linear-gradient(135deg, var(--primary) 0%, #7c3aed 100%);
+            color: white;
+            border: none;
+            padding: 16px;
+            width: 100%;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            margin-top: 10px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            font-family: 'Inter', sans-serif;
+        }
+
+        input[type="submit"]:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px -10px rgba(124, 58, 237, 0.5);
+        }
+
+        input[type="submit"]:active {
+            transform: translateY(0);
+        }
+
+        .result {
+            margin-top: 30px;
+            padding: 20px;
+            border-radius: 10px;
+            font-weight: 600;
+            text-align: center;
+            font-size: 18px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.02);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .risk {
+            background-color: var(--risk-bg);
+            color: var(--risk-text);
+            border: 1px solid var(--risk-border);
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.2);
+        }
+
+        .safe {
+            background-color: var(--safe-bg);
+            color: var(--safe-text);
+            border: 1px solid var(--safe-border);
+            box-shadow: 0 0 20px rgba(34, 197, 94, 0.2);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>Dropout Predictor AI</h2>
+        <form method="POST">
+            <div class="form-group">
+                <label for="attendance">Attendance (%)</label>
+                <input type="number" id="attendance" name="attendance" step="any" placeholder="e.g. 85" required>
+            </div>
+
+            <div class="form-group">
+                <label for="marks">Academic Marks (%)</label>
+                <input type="number" id="marks" name="marks" step="any" placeholder="e.g. 80" required>
+            </div>
+
+            <div class="form-group">
+                <label for="study_hours">Daily Study Hours</label>
+                <input type="number" id="study_hours" name="study_hours" step="any" placeholder="e.g. 3.5" required>
+            </div>
+
+            <input type="submit" value="Analyze Risk Pattern">
+        </form>
+
+        {% if prediction %}
+        <div class="result {% if 'High' in prediction %}risk{% else %}safe{% endif %}">
+            {{ prediction }}
+        </div>
+        {% endif %}
+    </div>
+</body>
+
+</html>
